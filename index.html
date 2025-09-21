@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fit-Litup - Home</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body {
+      background: #f4f7f9;
+      color: #333;
+      line-height: 1.6;
+      overflow-x: hidden;
+      opacity: 0; /* Start invisible for fade-in */
+      transition: opacity 0.8s ease-in-out;
+    }
+    body.fade-out { opacity: 0; }
+
+    /* Header / Nav */
+    header {
+      background: #0056b3;
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo { display: flex; align-items: center; }
+    .logo-img { height: 50px; margin-right: 10px; border-radius: 50%; object-fit: cover; }
+    .logo-text { font-size: 1.4rem; font-weight: bold; color: #fff; }
+
+    .hamburger { display: block; cursor: pointer; z-index: 1100; }
+    .hamburger div {
+      width: 25px; height: 3px; background: white;
+      margin: 5px; border-radius: 5px; transition: 0.4s;
+    }
+    .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active div:nth-child(2) { opacity: 0; }
+    .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+    nav {
+      position: fixed; top: 0; right: -250px;
+      width: 250px; height: 100%;
+      background: #003f7f; color: #fff;
+      padding-top: 60px; transition: 0.4s;
+    }
+    nav ul { list-style: none; }
+    nav ul li { padding: 15px 20px; border-bottom: 1px solid #444; }
+    nav ul li a { color: #fff; text-decoration: none; font-size: 1.1rem; }
+    nav.active { right: 0; }
+
+    /* Greeting */
+    #greeting {
+      padding: 15px 20px;
+      font-weight: bold;
+      border-bottom: 1px solid #444;
+      display: none;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative; height: 70vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; color: #fff; overflow: hidden;
+    }
+    .hero-video, .hero-img {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .hero-video { display: none; }
+    .hero-img { display: block; }
+
+    @media(min-width: 768px) {
+      .hero-video { display: block; }
+      .hero-img { display: none; }
+    }
+
+    .hero h2 {
+      font-size: 2rem;
+      background: rgba(0,0,0,0.6);
+      padding: 12px 25px; border-radius: 12px;
+      font-weight: bold;
+    }
+    .auth-links { margin-top: 15px; }
+    .auth-links a { color: #fff; margin: 0 10px; text-decoration: underline; cursor: pointer; }
+
+    /* Footer */
+    footer { text-align: center; padding: 20px; background: #0056b3; color: #fff; margin-top: 30px; }
+
+    /* Auth Modal */
+    #authModal {
+      display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:2000;
+    }
+    #authModal .modal-content {
+      background:#fff; padding:20px; border-radius:10px; width:320px; text-align:center;
+    }
+    #authModal input { width:100%; padding:10px; margin:10px 0; }
+    #authModal button {
+      width:100%; padding:10px; margin-top:5px;
+      border:none; border-radius:5px; cursor:pointer;
+    }
+
+    @media(min-width: 768px) {
+      .hamburger { display: none; }
+      nav { position: static; width: auto; height: auto; background: none; padding: 0; display: block; }
+      nav ul { display: flex; align-items: center; }
+      nav ul li { border: none; }
+      nav ul li a { padding: 0 15px; }
+      #greeting { border: none; padding: 0 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="images/fitlitup-logo.png" alt="Fit-Litup Logo" class="logo-img">
+      <span class="logo-text">Fit-Litup</span>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()" id="hamburger"><div></div><div></div><div></div></div>
+    <nav id="menu">
+      <div id="greeting">Hi, User 👋</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#" onclick="checkAuth()">Program</a></li>
+        <li><a href="nutrition.html">Nutrition</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="about.html">About</a></li>
+        <li id="logoutLink" style="display:none;"><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <video autoplay muted loop playsinline class="hero-video">
+      <source src="https://videos.pexels.com/video-files/4147264/4147264-uhd_2560_1440_25fps.mp4" type="video/mp4">
+    </video>
+    <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=600&auto=format&fit=crop&q=80" 
+         alt="Fitness Training" class="hero-img" loading="lazy">
+    <div>
+      <h2>Transform Your Body & Mind – Start Your Fitness Journey Today!</h2>
+      <div class="auth-links" id="authLinks">
+        <a onclick="openModal('signup')">Sign up</a> | 
+        <a onclick="openModal('signin')">Login</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Fit-Litup. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div id="authModal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Sign In</h3>
+      <input type="text" id="username" placeholder="Username or Email">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="submitAuth()">Submit</button>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Fade-in effect
+      document.body.style.opacity = "1";
+      updateAuthUI();
+    });
+
+    function toggleMenu() {
+      document.getElementById('menu').classList.toggle('active');
+      document.getElementById('hamburger').classList.toggle('active');
+    }
+
+    function openModal(type) {
+      document.getElementById("authModal").style.display = "flex";
+      document.getElementById("modalTitle").innerText = type === 'signup' ? "Sign Up" : "Sign In";
+      document.getElementById("authModal").setAttribute("data-type", type);
+    }
+
+    function closeModal() {
+      document.getElementById("authModal").style.display = "none";
+    }
+
+    function submitAuth() {
+      const type = document.getElementById("authModal").getAttribute("data-type");
+      const username = document.getElementById("username").value;
+
+      if (username.trim() === "") {
+        alert("Please enter a username");
+        return;
+      }
+
+      localStorage.setItem("fitlitupUser", username);
+      updateAuthUI();
+      closeModal();
+      alert(type === "signup" ? "Account created successfully!" : "Logged in successfully!");
+
+      // Fade out then redirect to program page
+      document.body.classList.add("fade-out");
+      setTimeout(() => window.location.href = "program.html", 800);
+    }
+
+    function checkAuth() {
+      const user = localStorage.getItem("fitlitupUser");
+      if (user) {
+        document.body.classList.add("fade-out");
+        setTimeout(() => window.location.href = "program.html", 800);
+      } else {
+        openModal('signin');
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("fitlitupUser");
+      updateAuthUI();
+      alert("You have logged out.");
+
+      document.body.classList.add("fade-out");
+      setTimeout(() => window.location.href = "index.html", 800);
+    }
+
+    function updateAuthUI() {
+      const user = localStorage.getItem("fitlitupUser");
+      const authLinks = document.getElementById("authLinks");
+      const logoutLink = document.getElementById("logoutLink");
+      const greeting = document.getElementById("greeting");
+
+      if (user) {
+        authLinks.style.display = "none";
+        logoutLink.style.display = "block";
+        greeting.style.display = "block";
+        greeting.textContent = `Hi, ${user} 👋`;
+      } else {
+        authLinks.style.display = "block";
+        logoutLink.style.display = "none";
+        greeting.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

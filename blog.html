@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fit-Litup - Blog</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+    body {
+      background: #f4f7f9;
+      color: #333;
+      line-height: 1.6;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+    body.fade-out { opacity: 0; }
+
+    /* Header/Nav */
+    header {
+      background: #0056b3;
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo { display:flex; align-items:center; }
+    .logo-img { height:50px; margin-right:10px; border-radius:50%; object-fit:cover; }
+    .logo-text { font-size:1.4rem; font-weight:bold; color:#fff; }
+
+    .hamburger { display: block; cursor: pointer; z-index: 1100; }
+    .hamburger div { width:25px; height:3px; background:white; margin:5px; border-radius:5px; transition:0.4s; }
+    .hamburger.active div:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+    .hamburger.active div:nth-child(2) { opacity:0; }
+    .hamburger.active div:nth-child(3) { transform:rotate(-45deg) translate(6px,-6px); }
+
+    nav { position: fixed; top:0; right:-250px; width:250px; height:100%; background:#003f7f; padding-top:60px; transition:0.4s; }
+    nav ul { list-style:none; }
+    nav ul li { padding:15px 20px; border-bottom:1px solid #444; }
+    nav ul li a { color:#fff; text-decoration:none; font-size:1.1rem; }
+    nav.active { right:0; }
+    #greeting { padding:15px 20px; font-weight:bold; border-bottom:1px solid #444; display:none; }
+
+    @media(min-width:768px){
+      .hamburger { display:none; }
+      nav { position: static; width:auto; height:auto; background:none; padding:0; display:block; }
+      nav ul { display:flex; align-items:center; }
+      nav ul li { border:none; }
+      nav ul li a { padding:0 15px; }
+      #greeting { border:none; padding:0 15px; }
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      height: 40vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      background: url('https://images.unsplash.com/photo-1599058917211-645daef5c41c?auto=format&fit=crop&w=1600&q=80') no-repeat center/cover;
+    }
+    .hero h1 {
+      font-size:2.5rem;
+      background: rgba(0,0,0,0.5);
+      padding: 15px 25px;
+      border-radius:12px;
+    }
+
+    /* Blog Grid */
+    .blog-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media(min-width:768px){
+      .blog-container { grid-template-columns: repeat(2,1fr); }
+    }
+    @media(min-width:1024px){
+      .blog-container { grid-template-columns: repeat(3,1fr); }
+    }
+
+    .blog-card {
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .blog-card:hover { transform: translateY(-5px); }
+
+    .blog-card img { width:100%; height:200px; object-fit:cover; }
+    .blog-card-content { padding:15px; }
+    .blog-card-content h3 { font-size:1.2rem; margin-bottom:10px; }
+    .blog-card-content p { font-size:0.95rem; color:#555; }
+    .read-more {
+      display: inline-block;
+      margin-top: 10px;
+      color: #0056b3;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    .read-more:hover { color: #ff7a00; }
+
+    /* Footer */
+    footer { text-align:center; padding:20px; background:#0056b3; color:#fff; margin-top:30px; }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="images/fitlitup-logo.png" alt="Fit-Litup Logo" class="logo-img">
+      <span class="logo-text">Fit-Litup</span>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()" id="hamburger"><div></div><div></div><div></div></div>
+    <nav id="menu">
+      <div id="greeting">Hi, User 👋</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#" onclick="checkAuth()">Program</a></li>
+        <li><a href="nutrition.html">Nutrition</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="about.html">About</a></li>
+        <li id="logoutLink" style="display:none;"><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Fit-Litup Blog</h1>
+  </section>
+
+  <!-- Blog Articles -->
+  <section class="blog-container">
+
+    <div class="blog-card">
+      <img src="https://images.unsplash.com/photo-1554284126-8fd2ae1dbb1d?auto=format&fit=crop&w=800&q=80" alt="Blog 1">
+      <div class="blog-card-content">
+        <h3>5 Tips to Boost Your Fitness Journey</h3>
+        <p>Discover practical strategies to stay motivated and improve your workouts efficiently.</p>
+        <a href="blog1.html" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+    <div class="blog-card">
+      <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80" alt="Blog 2">
+      <div class="blog-card-content">
+        <h3>Healthy Meal Plans for Active Lifestyles</h3>
+        <p>Learn how to combine nutrition and exercise to achieve optimal results without dieting stress.</p>
+        <a href="blog2.html" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+    <div class="blog-card">
+      <img src="https://images.unsplash.com/photo-1599058917077-3b5e88fa1a0f?auto=format&fit=crop&w=800&q=80" alt="Blog 3">
+      <div class="blog-card-content">
+        <h3>Top 10 Fitness Myths Debunked</h3>
+        <p>Separate fact from fiction and understand what truly works in health and fitness.</p>
+        <a href="blog3.html" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+    <div class="blog-card">
+      <img src="https://images.unsplash.com/photo-1554284126-8fd2ae1dbb1d?auto=format&fit=crop&w=800&q=80" alt="Blog 4">
+      <div class="blog-card-content">
+        <h3>Mindfulness and Exercise</h3>
+        <p>How connecting your mind and body can improve performance and reduce stress during workouts.</p>
+        <a href="blog4.html" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+    <div class="blog-card">
+      <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80" alt="Blog 5">
+      <div class="blog-card-content">
+        <h3>Home Workouts for Busy Schedules</h3>
+        <p>Easy-to-follow routines that require minimal equipment and help you stay active anywhere.</p>
+        <a href="blog5.html" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+    <div class="blog-card">
+      <img src="https://images.unsplash.com/photo-1599058917077-3b5e88fa1a0f?auto=format&fit=crop&w=800&q=80" alt="Blog 6">
+      <div class="blog-card-content">
+        <h3>Hydration Tips for Athletes</h3>
+        <p>Learn the best strategies to stay hydrated and maximize your physical performance.</p>
+        <a href="blog6.html" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Fit-Litup. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.style.opacity = "1"; // Fade-in page
+      updateAuthUI();
+    });
+
+    function toggleMenu() {
+      document.getElementById('menu').classList.toggle('active');
+      document.getElementById('hamburger').classList.toggle('active');
+    }
+
+    function checkAuth() {
+      const user = localStorage.getItem("fitlitupUser");
+      if(user){
+        document.body.classList.add("fade-out");
+        setTimeout(()=> window.location.href="program.html",800);
+      }else{
+        alert("Please log in to access the program.");
+      }
+    }
+
+    function logout(){
+      localStorage.removeItem("fitlitupUser");
+      updateAuthUI();
+      alert("You have logged out.");
+      document.body.classList.add("fade-out");
+      setTimeout(()=> window.location.href="index.html",800);
+    }
+
+    function updateAuthUI(){
+      const user = localStorage.getItem("fitlitupUser");
+      const greeting = document.getElementById("greeting");
+      const logoutLink = document.getElementById("logoutLink");
+
+      if(user){
+        greeting.style.display="block";
+        greeting.textContent = `Hi, ${user} 👋`;
+        logoutLink.style.display="block";
+      } else {
+        greeting.style.display="none";
+        logoutLink.style.display="none";
+      }
+    }
+  </script>
+</body>
+</html>
